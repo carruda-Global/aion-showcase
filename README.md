@@ -12,7 +12,7 @@ Esta vitrine é **curada e sem segredos**: mostra a estrutura, as decisões de a
 |---|---|---|
 | **Multiagentes** | Orquestrador com planner, router, coordinator e synthesizer; executor por agente com gate de assinatura; protocolo A2A; fluxo de voz em LangGraph; validação de saída por Quality Critic; camada multi-LLM com fallback | [MULTIAGENT_ARCHITECTURE](docs/MULTIAGENT_ARCHITECTURE.md) |
 | **Infraestrutura** | Contêiner Docker no Render com três processos supervisionados, disco persistente, jobs agendados e health checks; manifestos de Kubernetes, Terraform, Cloud Build e Prometheus/Grafana prontos | [INFRASTRUCTURE](docs/INFRASTRUCTURE.md) |
-| **Segurança** | Gate de assinatura, circuit breaker, trilha de auditoria e recibos de conformidade no caminho de execução; proteção de propriedade intelectual e demais controles por nível de integração, com a ordem dos próximos passos | [SECURITY](docs/SECURITY.md) |
+| **Segurança** | Gate de assinatura, circuit breaker, trilha de auditoria e recibos no caminho de execução; **Agent Guard** (máscara de PII, orçamento e política por agente em um ponto central, em integração); proteção de propriedade intelectual por nível | [SECURITY](docs/SECURITY.md) · [AGENT_GUARD](docs/AGENT_GUARD.md) |
 | **Compliance** | Produto (SOC 2, ISO 27001, EU AI Act, CSRD, NR-1, LGPD, carbono, CBS/IBS…) e plataforma (consentimento, solicitações de titular, recibos de auditoria de IA) | [COMPLIANCE](docs/COMPLIANCE.md) |
 
 ## Portfólio

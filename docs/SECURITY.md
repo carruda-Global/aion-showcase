@@ -20,14 +20,18 @@ Controles integrados ao agente revisor, que valida as saídas de texto livre no 
 
 Marca d'água de pesos, **MASLEAK** (defesa contra extração da topologia multiagente), **DIRF** (consentimento e direitos de identidade), motor de decisão de política (permitir, perguntar, negar) e registro de agentes AIP. Têm testes e scripts de validação, e ainda não são chamados pelas requisições de produção.
 
+## Em integração agora: Agent Guard
+
+Um ponto central nos clientes de LLM aplica máscara de PII, orçamento diário e política por agente a toda chamada, inclusive de agentes novos. Implementado e testado em branch, com revisão aplicada, e com ativação planejada em modo sombra. Detalhes em [AGENT_GUARD.md](AGENT_GUARD.md).
+
 ## Nível 4: construído, ainda não ligado
 
 ABAC e RBAC, DLP, mascaramento de PII, kill-switch de custo e controlador de orçamento, sanitização de entrada e detecção de ameaças.
 
 ## Próximos passos (prioridade)
 
-1. **Controle de custo** (orçamento e kill-switch por tenant): evita gasto descontrolado de LLM.
-2. **Sanitização de entrada e mascaramento de PII** antes de chamar o modelo: proteção contra injeção de prompt e dados pessoais em transcrições e documentos.
+1. **Controle de custo** e **mascaramento de PII**: em integração pelo Agent Guard (ver acima).
+2. **Cobrir os pontos que chamam o SDK direto** e o segundo orquestrador.
 3. **RBAC por tenant** nas rotas de produto.
 4. Proteção de propriedade intelectual (níveis 2 e 3): fica por último, pois protege contra roubo de modelo e não contra o risco operacional atual.
 
