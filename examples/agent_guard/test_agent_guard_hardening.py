@@ -64,7 +64,7 @@ class TestPolicyAndConstruction:
 
 class TestPIIPrecision:
     def test_phone_requires_valid_ddd_and_ignores_year_ranges(self):
-        assert mask_pii("tel (11) 99479-8464")[0] == "tel [PHONE]"
+        assert mask_pii("tel (11) 91234-5678")[0] == "tel [PHONE]"
         for text in ("paginas 12 2023-2024", "(00) 1234-5678", "10 1234-5678"):
             assert mask_pii(text)[0] == text
 
