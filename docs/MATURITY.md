@@ -2,10 +2,10 @@
 
 Source: an internal handoff document written after testing each product live (not assumptions).
 
-## Level 1 — complete and tested end to end (19)
+## Level 1 — complete and tested end to end
 Real backend + persistence + subscription paywall, tested against the deployed API.
 
-SOC 2 Readiness · ISO 27001 Gap Analysis · EU AI Act Readiness · Contract Risk (15 clause types) · Vendor Risk (13 criteria) · NR-1 Psychosocial (company → sector → PGR.docx) · Procurement Copilot · Engineering Copilot (9 DOCX deliverables) · Engineering Suite (10 specialists) · Regulatory Analyst · Compliance PM · MAI Code Reviewer · CSRD Double Materiality (ESRS Set 1) · Whistleblower Channel (Directive 2019/1937) · Carbon Inventory (GHG Protocol 1+2) · Scope 3 Suppliers (+CBAM exposure) · CBS/IBS Tax readiness · Pay Equity (Law 14.611/2023) · Anti-Corruption (Decree 11.129/2022).
+SOC 2 Readiness · ISO 27001 Gap Analysis · EU AI Act Readiness · Contract Risk · Vendor Risk · NR-1 Psychosocial (company → sector → PGR.docx) · Procurement Copilot · Engineering Copilot (DOCX deliverables incl. As-Built) · Engineering Suite (specialist agents) · Regulatory Analyst · Compliance PM · MAI Code Reviewer · CSRD Double Materiality (ESRS Set 1) · Whistleblower Channel (Directive 2019/1937) · Carbon Inventory (GHG Protocol 1+2) · Scope 3 Suppliers (+CBAM exposure) · CBS/IBS Tax readiness · Pay Equity (Law 14.611/2023) · Anti-Corruption (Decree 11.129/2022).
 
 Common pattern: a fixed, real regulatory catalog drives the assessment; the LLM answers narrow per-item questions; deterministic code decides scores and thresholds.
 
@@ -17,4 +17,4 @@ Items with no real backend (generic orchestrator verticals, a physical-AI connec
 
 ## Known limitations (tracked, not hidden)
 - The GitHub-webhook entry of the code reviewer has no tenant → subscription mapping, so it is not gated.
-- Voice receptionist: pilot stage, one activated customer; telemetry sample is small.
+- Voice receptionist: pilot stage.

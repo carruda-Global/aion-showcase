@@ -1,60 +1,92 @@
-# AION — multi-agent AI platform (engineering showcase)
+# AION — plataforma multiagente de IA (vitrine de engenharia)
 
-AION is a multi-agent platform I designed and built end to end: LLM agents for regulatory compliance, engineering documentation, voice reception and autonomous sales outreach, exposed through a FastAPI backend with billing, audit trails and per-agent access control. It is a working, deployed system, not a scaled commercial operation.
+AION é uma plataforma de agentes de IA que projetei e construí de ponta a ponta, **implantada e rodando em produção**: agentes baseados em LLMs para compliance regulatório, documentação de engenharia, recepção por voz e prospecção comercial autônoma, servidos por um backend FastAPI com cobrança, trilha de auditoria e controle de acesso por agente.
 
-This repository is a **curated, secret-free showcase**: architecture, real code excerpts, and evidence you can verify yourself. The full product repositories are private because they contain customer and commercial logic.
+Este repositório é uma **vitrine curada e sem segredos**: mostra a estrutura, a forma de pensar e trechos reais de código. Os repositórios completos do produto são privados por conterem lógica comercial e de clientes.
 
-> Evidence below was checked on **2026-11-03** (see [docs/DEPLOYMENT_EVIDENCE.md](docs/DEPLOYMENT_EVIDENCE.md)).
-> Every number here is something you can reproduce with one command. Where something is early-stage, it says so.
+*(A documentação em `docs/` está em inglês.)*
 
-## What is deployed (verify it yourself)
+## Arquitetura
 
-| Claim | How to check |
+```mermaid
+flowchart LR
+  subgraph Canais
+    S[Sites e landing pages]
+    V[Telefonia / voz - Vapi]
+    L[LinkedIn - conteúdo e prospecção]
+    M[Listagens em marketplaces]
+  end
+  subgraph Backend[Backend FastAPI - Render]
+    R[Routers por produto]
+    G[Governança: licença por agente, ABAC/RBAC, PII, DLP, auditoria]
+    A[Agentes e fluxos LangGraph]
+  end
+  subgraph LLMs[Camada multi-LLM]
+    D[DeepSeek]
+    C[Claude]
+    GE[Gemini]
+    O[Cliente compatível OpenAI]
+  end
+  subgraph Dados
+    P[(Supabase / PostgreSQL)]
+    Q[(Qdrant)]
+  end
+  ST[Stripe - cobrança]
+  Canais --> R --> G --> A --> LLMs
+  A --> Dados
+  R --> ST
+  GH[GitHub Actions - health checks e jobs agendados] -.-> Backend
+```
+
+## A vaga pede → onde está na estrutura
+
+### Responsabilidades
+| Responsabilidade | Onde ver |
 |---|---|
-| Backend is live, versioned, documented | `curl https://engenheiro-producao-ai.onrender.com/openapi.json` → **346 endpoints**, version `7.0.0` |
-| Marketing site and product pages are live | https://aion.global · https://global-engenharia.com/ecosystem |
-| Voice receptionist product is live | https://aionreceptionist.com (demo line on the page, no signup) |
-| Real usage and cost telemetry are exposed | `GET /api/voice-agent/billing/cost-per-minute` and `/billing/customer-count` |
-| Engineering history is real | ~130 commits, 41 test files, GitHub Actions for health checks and scheduled jobs |
-| Honest maturity tracking | [docs/MATURITY.md](docs/MATURITY.md): which agents are verified end to end, which are not |
+| Identificar oportunidades de IA em produtos e processos | Cada vertical parte de um processo real: compliance (SOC 2, ISO 27001, EU AI Act, CSRD, LGPD…), engenharia (projeto → documento → conformidade), atendimento por voz, prospecção. Ver [docs/MATURITY.md](docs/MATURITY.md) |
+| Projetar, desenvolver e evoluir agentes, assistentes e soluções com LLMs | Módulos de agentes por produto; fluxos em LangGraph → [examples/voice_call_langgraph_excerpt.py](examples/voice_call_langgraph_excerpt.py) |
+| Protótipos, PoCs e MVPs | Os níveis de maturidade mostram o caminho de endpoint experimental até produto com assinatura → [docs/MATURITY.md](docs/MATURITY.md) |
+| IA generativa, RAG, automação e integrações via API | Camada multi-LLM; cliente Qdrant e base de conhecimento por cliente no agente de voz; integrações com Stripe, Vapi e a API de Documentos do LinkedIn → [examples/linkedin_document_upload_excerpt.py](examples/linkedin_document_upload_excerpt.py) |
+| Requisitos e arquitetura com Produto e Tecnologia | Documentos de handoff por produto e níveis de maturidade; decisões registradas |
+| Testar, avaliar e otimizar a qualidade dos agentes | Padrão "catálogo determinístico + LLM em perguntas estreitas" → [examples/csrd_deterministic_agent.py](examples/csrd_deterministic_agent.py); agente revisor de qualidade e segurança; suíte de testes |
+| Métricas, resultados e adoção | Telemetria de custo e uso por chamada; workflows de health check e relatórios agendados |
+| Pesquisar novas tecnologias | Protocolos MCP e A2A; troca de provedor de LLM sem reescrever agentes |
+| Segurança, qualidade e governança | Licença por agente, ABAC/RBAC, mascaramento de PII, DLP, circuit breaker, kill-switch de custo e cadeia de auditoria à prova de adulteração → [examples/merkle_audit_chain.py](examples/merkle_audit_chain.py) |
 
-## What it does
+### O que a vaga busca
+| Busca | Evidência |
+|---|---|
+| Experiência prática com IA generativa | Produtos de compliance e engenharia que geram relatórios e documentos reais (PDF, DOCX) |
+| LLMs, prompt engineering, RAG, agentes, APIs | Prompts de escopo estreito, saída estruturada validada em código, pipeline de agentes, integrações externas |
+| Produtos e automações baseados em IA | Plataforma implantada com cobrança por assinatura e agente comercial agendado |
+| Transformar problema de negócio em solução | Formação em engenharia de produção e anos de gestão de projetos aplicados ao desenho dos agentes |
+| Autonomia ponta a ponta | Do desenho ao deploy e à operação, incluindo diagnóstico de incidentes → [docs/INCIDENT_LINKEDIN_AGENT.md](docs/INCIDENT_LINKEDIN_AGENT.md) |
+| Ambiente dinâmico, várias áreas | Produto, jurídico/compliance, vendas e infraestrutura no mesmo ciclo |
 
-- **Compliance agents (19 product modules tested end to end in July 2026):** SOC 2, ISO 27001, EU AI Act, CSRD double materiality, Whistleblower (EU 2019/1937), Carbon inventory (GHG Protocol), Scope 3, CBS/IBS tax reform, Pay Equity, Anti-Corruption, Vendor/Contract risk, NR-1 psychosocial.
-- **Engineering agents:** project → document → photo → compliance pipeline that generates nine DOCX deliverables (including As-Built); a ten-specialist engineering suite.
-- **AI Voice Receptionist:** Vapi telephony + LangGraph post-call pipeline (classification, extraction, summary, audit receipt). Pilot stage.
-- **Autonomous LinkedIn sales machine:** scheduled content engine with a 200-variation topic×hook bank, engagement-weighted topic selection, tracked links, carousel PDF generation and publishing.
-- **Maturity:** agents are tracked by level; only the tested subset is counted above. See the maturity doc.
+### Diferenciais
+| Diferencial | Situação |
+|---|---|
+| Anthropic, Gemini, DeepSeek e API compatível com OpenAI | Clientes dedicados no backend |
+| LangGraph | Em uso (fluxo de voz com nós concorrentes e nó de compliance) |
+| Python | Backend inteiro |
+| Produtos digitais e inovação | Plataforma, sites e listagens em marketplaces |
+| Arquitetura de agentes e multimodalidade | Fluxos com voz (telefonia), documentos e fotos na entrada do copiloto de engenharia |
 
-## Design principles (the part I'd want a reviewer to read)
+## Princípios de design
 
-1. **The LLM never makes the decision that matters.** In the CSRD agent a fixed regulatory catalog drives the assessment; the model only answers narrow questions per catalog item, and a deterministic function computes materiality and the readiness score. → [examples/csrd_deterministic_agent.py](examples/csrd_deterministic_agent.py)
-2. **Agents are graphs, not prompts.** The voice pipeline is a LangGraph graph with a concurrent fan-out and a dedicated compliance node that writes an audit receipt as its own concern. → [examples/voice_call_langgraph_excerpt.py](examples/voice_call_langgraph_excerpt.py)
-3. **Governance is code.** Paywall/license checks per agent, ABAC/RBAC, PII masking, DLP, circuit breakers, cost kill-switch, and a tamper-evident Merkle audit chain (`src/security/`, ~35 modules). → [examples/merkle_audit_chain.py](examples/merkle_audit_chain.py)
-4. **Run what you build.** Health-check workflows, cost-per-minute telemetry, and written post-mortems. → [docs/INCIDENT_LINKEDIN_AGENT.md](docs/INCIDENT_LINKEDIN_AGENT.md)
+1. **O LLM não toma a decisão que importa.** No agente de CSRD, um catálogo regulatório fixo conduz a avaliação; o modelo responde perguntas estreitas por item e uma função determinística calcula materialidade e pontuação.
+2. **Agentes são grafos, não prompts soltos.** O pipeline de voz roda em LangGraph, com nós concorrentes e um nó de compliance que grava o recibo de auditoria.
+3. **Governança é código**, não documento: licença, controle de acesso, auditoria e limites de custo ficam no próprio backend.
+4. **Rodar o que se constrói.** Health checks agendados, telemetria de custo e post-mortems escritos.
+
+## Verifique você mesmo
+
+Os comandos em [docs/DEPLOYMENT_EVIDENCE.md](docs/DEPLOYMENT_EVIDENCE.md) mostram o backend no ar, a documentação OpenAPI e os sites. Tudo que está aqui pode ser conferido, e o que ainda está em fase inicial está identificado como tal.
 
 ## Stack
 
-Python 3.11/3.12 · FastAPI · LangGraph · DeepSeek (primary), Claude, Gemini · Supabase/PostgreSQL · Qdrant · Stripe · Vapi · Render · Docker · GitHub Actions · MCP · ReportLab.
+Python · FastAPI · LangGraph · DeepSeek, Claude, Gemini · Supabase/PostgreSQL · Qdrant · Stripe · Vapi · Docker · Render · GitHub Actions · MCP
 
-## Where each capability lives
+## Contato
 
-| Capability | Where to look |
-|---|---|
-| LLM agents and prompt design | `examples/csrd_deterministic_agent.py`, `examples/voice_call_langgraph_excerpt.py` |
-| Multi-agent orchestration (LangGraph) | `examples/voice_call_langgraph_excerpt.py` |
-| API integrations (LinkedIn Documents API, Stripe, Vapi) | `examples/linkedin_document_upload_excerpt.py`, `examples/linkedin_sales_machine.py` |
-| Automation, scheduling, recovery | `examples/linkedin_sales_machine.py` (daily 4-slot scheduler, error back-off) |
-| Evaluation and quality | deterministic scoring pattern (design principle 1); post-call classification |
-| Security, quality and governance | design principle 3; `docs/MATURITY.md` |
-| Metrics and adoption | `/billing/cost-per-minute`, `/billing/customer-count`, health workflows |
-
-## What this is not
-
-- No claim of production scale, revenue or customer traction. The voice receptionist has **one activated customer** and is in pilot.
-- Not every listed agent is production-grade; the maturity doc separates verified from experimental.
-- Some internal modules are scaffolds and are deliberately **not** included here.
-
-## Contact
-
-Cristiano Almeida Arruda — AI Engineer · [linkedin.com/in/cristiano-arruda](https://www.linkedin.com/in/cristiano-arruda) · São Paulo, Brazil
+Cristiano Almeida Arruda · Engenheiro de IA · [linkedin.com/in/cristiano-arruda](https://www.linkedin.com/in/cristiano-arruda) · São Paulo
