@@ -1,4 +1,4 @@
-# Production evidence (checked 2026-11-03)
+# Deployment evidence (checked 2026-11-03)
 
 Reproduce any line below yourself.
 

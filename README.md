@@ -1,13 +1,13 @@
 # AION — multi-agent AI platform (engineering showcase)
 
-AION is a production multi-agent platform I designed and built end to end: LLM agents for regulatory compliance, engineering documentation, voice reception and autonomous sales outreach, exposed through a FastAPI backend with billing, audit trails and per-agent access control.
+AION is a multi-agent platform I designed and built end to end: LLM agents for regulatory compliance, engineering documentation, voice reception and autonomous sales outreach, exposed through a FastAPI backend with billing, audit trails and per-agent access control. It is a working, deployed system, not a scaled commercial operation.
 
 This repository is a **curated, secret-free showcase**: architecture, real code excerpts, and evidence you can verify yourself. The full product repositories are private because they contain customer and commercial logic.
 
-> Evidence below was checked on **2026-11-03** (see [docs/PRODUCTION_EVIDENCE.md](docs/PRODUCTION_EVIDENCE.md)).
+> Evidence below was checked on **2026-11-03** (see [docs/DEPLOYMENT_EVIDENCE.md](docs/DEPLOYMENT_EVIDENCE.md)).
 > Every number here is something you can reproduce with one command. Where something is early-stage, it says so.
 
-## Is it a prototype? Verify it
+## What is deployed (verify it yourself)
 
 | Claim | How to check |
 |---|---|
@@ -20,18 +20,18 @@ This repository is a **curated, secret-free showcase**: architecture, real code 
 
 ## What it does
 
-- **Compliance agents (19 product modules verified end to end):** SOC 2, ISO 27001, EU AI Act, CSRD double materiality, Whistleblower (EU 2019/1937), Carbon inventory (GHG Protocol), Scope 3, CBS/IBS tax reform, Pay Equity, Anti-Corruption, Vendor/Contract risk, NR-1 psychosocial.
+- **Compliance agents (19 product modules tested end to end in July 2026):** SOC 2, ISO 27001, EU AI Act, CSRD double materiality, Whistleblower (EU 2019/1937), Carbon inventory (GHG Protocol), Scope 3, CBS/IBS tax reform, Pay Equity, Anti-Corruption, Vendor/Contract risk, NR-1 psychosocial.
 - **Engineering agents:** project → document → photo → compliance pipeline that generates nine DOCX deliverables (including As-Built); a ten-specialist engineering suite.
 - **AI Voice Receptionist:** Vapi telephony + LangGraph post-call pipeline (classification, extraction, summary, audit receipt). Pilot stage.
 - **Autonomous LinkedIn sales machine:** scheduled content engine with a 200-variation topic×hook bank, engagement-weighted topic selection, tracked links, carousel PDF generation and publishing.
-- **Catalog:** 71 agents listed across the marketplaces; the verified-end-to-end subset is the 19 above. See maturity doc.
+- **Maturity:** agents are tracked by level; only the tested subset is counted above. See the maturity doc.
 
 ## Design principles (the part I'd want a reviewer to read)
 
 1. **The LLM never makes the decision that matters.** In the CSRD agent a fixed regulatory catalog drives the assessment; the model only answers narrow questions per catalog item, and a deterministic function computes materiality and the readiness score. → [examples/csrd_deterministic_agent.py](examples/csrd_deterministic_agent.py)
 2. **Agents are graphs, not prompts.** The voice pipeline is a LangGraph graph with a concurrent fan-out and a dedicated compliance node that writes an audit receipt as its own concern. → [examples/voice_call_langgraph_excerpt.py](examples/voice_call_langgraph_excerpt.py)
 3. **Governance is code.** Paywall/license checks per agent, ABAC/RBAC, PII masking, DLP, circuit breakers, cost kill-switch, and a tamper-evident Merkle audit chain (`src/security/`, ~35 modules). → [examples/merkle_audit_chain.py](examples/merkle_audit_chain.py)
-4. **Operate what you ship.** Health-check workflows, cost-per-minute telemetry, and written post-mortems. → [docs/INCIDENT_LINKEDIN_AGENT.md](docs/INCIDENT_LINKEDIN_AGENT.md)
+4. **Run what you build.** Health-check workflows, cost-per-minute telemetry, and written post-mortems. → [docs/INCIDENT_LINKEDIN_AGENT.md](docs/INCIDENT_LINKEDIN_AGENT.md)
 
 ## Stack
 
@@ -51,7 +51,7 @@ Python 3.11/3.12 · FastAPI · LangGraph · DeepSeek (primary), Claude, Gemini �
 
 ## What this is not
 
-- Not a claim of large customer traction: the voice receptionist has **one activated customer** and is in pilot. The compliance products are live and gated by subscription, with early commercial traction.
+- No claim of production scale, revenue or customer traction. The voice receptionist has **one activated customer** and is in pilot.
 - Not every listed agent is production-grade; the maturity doc separates verified from experimental.
 - Some internal modules are scaffolds and are deliberately **not** included here.
 
