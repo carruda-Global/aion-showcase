@@ -15,6 +15,7 @@ flowchart LR
     V[Telefonia / voz - Vapi]
     L[LinkedIn - conteúdo e prospecção]
     M[Listagens em marketplaces]
+    PL[Plugins: Microsoft, Salesforce, Google, n8n, HubSpot, Stripe, Chrome]
   end
   subgraph Backend[Backend FastAPI - Render]
     R[Routers por produto]
@@ -37,6 +38,12 @@ flowchart LR
   R --> ST
   GH[GitHub Actions - health checks e jobs agendados] -.-> Backend
 ```
+
+## Portfólio completo
+
+- **[Portfólio de agentes](docs/AGENT_PORTFOLIO.md):** todos os agentes registrados, organizados por domínio (engenharia, compliance, Microsoft, Salesforce, Oracle/SAP, microagentes, orquestração), cada um com o que faz, o LLM e a situação real.
+- **[Plugins e integrações](docs/PLATFORM_INTEGRATIONS.md):** como os agentes chegam a Microsoft, Salesforce, Google, n8n, HubSpot, Stripe, Chrome, MCP e marketplaces.
+- **[Maturidade](docs/MATURITY.md):** quais produtos foram testados ponta a ponta contra a API implantada.
 
 ## A vaga pede → onde está na estrutura
 
