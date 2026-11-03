@@ -1,33 +1,37 @@
 # Segurança e governança de agentes
 
-A plataforma trata o agente como um ativo a proteger e como um ator a vigiar. Esta página separa o que **já está ligado ao fluxo de execução** do que está **implementado mas ainda não integrado**.
+A plataforma trata o agente como um ativo a proteger e como um ator a vigiar. Os controles foram construídos em fases e estão em **níveis de integração diferentes**. Esta página diz em qual nível cada um está.
 
-## Ligado ao fluxo de execução
+## Nível 1: no caminho de execução
 
 | Controle | O que faz |
 |---|---|
 | **Gate de assinatura por agente** | Recusa a execução se o plano do cliente não inclui o agente |
-| **Trust agent** | Intercepta ações de entrada e bloqueia as suspeitas |
-| **Detecção de extração de modelo** | Identifica consultas que tentam reconstruir o comportamento do agente |
-| **PragLocker** | Ofuscação e validação de prompts e bloqueio de habilidades |
-| **CoTGuard** | Monitoramento da cadeia de raciocínio |
-| **RedAct** | Redação das trajetórias de raciocínio para reduzir vazamento |
-| **AgentMark, SeqWM, WeightWM, marca de backdoor** | Marcas d'água de autoria nas saídas, na sequência de ações e nos pesos, com prova de propriedade por gatilho |
-| **MASLEAK** | Defesa contra extração da topologia do sistema multiagente (segmenta prompts, rastreia consultas, oculta a topologia) |
-| **DIRF** | Consentimento e direitos de identidade: registro e revogação de consentimento, registro de monetização, proteção de dados biométricos |
-| **ITR** | Controle de custo de LLM por compactação inteligente de contexto |
 | **Circuit breaker** | Corta um agente que falha repetidamente |
-| **Registro de agentes (AIP)** | Identidade e política por agente |
-| **Motor de decisão de política** | Decide permitir, perguntar ou negar a partir de política declarativa |
-| **Trilha de auditoria com cadeia Merkle** | Registro encadeado e à prova de adulteração → [../examples/merkle_audit_chain.py](../examples/merkle_audit_chain.py) |
-| **Recibos de conformidade** | Cada ação de IA relevante grava um recibo (por exemplo, a classificação de uma chamada de voz) |
+| **Trilha de auditoria e log de execução** | Cada tarefa do orquestrador é registrada |
+| **Recibos de conformidade** | Ações de IA relevantes gravam recibo (ferramenta, argumentos, resultado, risco); o fluxo de voz usa trilha encadeada → [../examples/merkle_audit_chain.py](../examples/merkle_audit_chain.py) |
+| **Proteção de endpoints administrativos** | Segredo de administração nas rotas sensíveis |
 
-## Implementado, ainda não integrado ao fluxo
+## Nível 2: aplicado na validação de saída (Quality Critic)
 
-ABAC e RBAC, DLP, mascaramento de PII, kill-switch de custo e controlador de orçamento, sanitização de entrada, detecção de ameaças e o cliente/proxy do registro de agentes. Existem como módulos, mas ainda não são chamados pelo caminho de execução. Estão no plano de trabalho, e não são apresentados aqui como proteção ativa.
+Controles integrados ao agente revisor, que valida as saídas de texto livre no orquestrador: **trust agent** (intercepta ações suspeitas), **detecção de extração de modelo**, **PragLocker** (ofuscação e validação de prompts), **CoTGuard** (monitoramento da cadeia de raciocínio), **RedAct** (redação de trajetórias), **marcas d'água** de autoria (AgentMark, SeqWM, backdoor) e **ITR** (compactação de contexto para custo).
+
+## Nível 3: implementado e testado em isolamento
+
+Marca d'água de pesos, **MASLEAK** (defesa contra extração da topologia multiagente), **DIRF** (consentimento e direitos de identidade), motor de decisão de política (permitir, perguntar, negar) e registro de agentes AIP. Têm testes e scripts de validação, e ainda não são chamados pelas requisições de produção.
+
+## Nível 4: construído, ainda não ligado
+
+ABAC e RBAC, DLP, mascaramento de PII, kill-switch de custo e controlador de orçamento, sanitização de entrada e detecção de ameaças.
+
+## Próximos passos (prioridade)
+
+1. **Controle de custo** (orçamento e kill-switch por tenant): evita gasto descontrolado de LLM.
+2. **Sanitização de entrada e mascaramento de PII** antes de chamar o modelo: proteção contra injeção de prompt e dados pessoais em transcrições e documentos.
+3. **RBAC por tenant** nas rotas de produto.
+4. Proteção de propriedade intelectual (níveis 2 e 3): fica por último, pois protege contra roubo de modelo e não contra o risco operacional atual.
 
 ## Segurança de aplicação
 
 - Configuração sensível por variável de ambiente; os manifestos de Kubernetes usam apenas placeholders.
-- Endpoints administrativos protegidos por segredo.
 - Middleware de privacidade e rotas de consentimento e de solicitação de titular (ver [COMPLIANCE.md](COMPLIANCE.md)).
