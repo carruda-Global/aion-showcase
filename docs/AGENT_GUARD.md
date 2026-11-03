@@ -69,7 +69,7 @@ Saída real do script de demonstração (roda offline, com um cliente de LLM sim
 - **Orçamento por instância:** em disco efêmero ou com várias instâncias, os totais não são compartilhados. Em produção, apontar `AGENT_GUARD_DB` para disco persistente ou migrar o livro-razão para o banco.
 - O modo de aplicação só deve ser ligado depois de uma semana de dados em modo sombra.
 
-## Como isso se conecta ao trabalho
+## O que isso demonstra
 
 Segurança, qualidade e governança em soluções de IA, acompanhamento de custo e de métricas, e testes e otimização do comportamento dos agentes: este módulo é um exemplo de cada um, em código, com testes, revisão e plano de rollout.
 
