@@ -38,7 +38,7 @@ flowchart TB
   end
   subgraph L7["7. Dados e operação"]
     direction LR
-    O1[("Supabase · SQLite")] ~~~ O2["Render · Docker"] ~~~ O3["GitHub Actions<br/>health checks"] ~~~ O4["Telemetria de<br/>custo e uso"]
+    O1[("Supabase · SQLite")] ~~~ O2["Render · Docker"] ~~~ O3["GitHub Actions<br/>pulso e verificação diária"] ~~~ O4["Telemetria de<br/>custo e uso"]
   end
   L1 --> L2 --> L3 --> L4 --> L7
   L2 --> L5
@@ -53,7 +53,7 @@ flowchart TB
 | **4. Integração e automação** | Cobrança, telefonia, redes e plataformas de automação | [Plugins e integrações](docs/PLATFORM_INTEGRATIONS.md) |
 | **5. Qualidade e avaliação** | Revisão de saída, pontuação em código e rollout em modo sombra | [Maturidade](docs/MATURITY.md) |
 | **6. Segurança e governança** | Gate de assinatura, auditoria e recibos em produção; proteção central de chamadas de LLM (Agent Guard) em integração | [Segurança](docs/SECURITY.md) · [Agent Guard](docs/AGENT_GUARD.md) · [Compliance](docs/COMPLIANCE.md) |
-| **7. Dados e operação** | Banco, contêineres, jobs agendados, health checks e telemetria | [Infraestrutura](docs/INFRASTRUCTURE.md) |
+| **7. Dados e operação** | Banco, contêineres, jobs agendados, verificação de saúde dos agentes, alertas de erro e telemetria | [Infraestrutura](docs/INFRASTRUCTURE.md) · [Saúde e erros](docs/HEALTH_AND_ERROR_REPORTING.md) |
 
 ## Capacidades
 
@@ -66,11 +66,11 @@ flowchart TB
 | **Automação e integrações via API** | Stripe, Vapi, API de Documentos do LinkedIn, Zapier, n8n, HubSpot e plugins Microsoft, Salesforce e Google | [linkedin_document_upload_excerpt.py](examples/linkedin_document_upload_excerpt.py) |
 | **Fluxos de agentes** | Pipeline de voz em LangGraph com nós concorrentes e nó de compliance | [voice_call_langgraph_excerpt.py](examples/voice_call_langgraph_excerpt.py) |
 | **Avaliação e qualidade** | Revisão de saída, pontuação determinística, testes automatizados, revisão de código e rollout em modo sombra | [Agent Guard](docs/AGENT_GUARD.md) |
-| **Métricas e adoção** | Telemetria de custo por chamada, status do guard, health checks e relatórios agendados | [Implantação](docs/DEPLOYMENT_EVIDENCE.md) |
+| **Métricas e adoção** | Log de execução por agente (duração, sucesso, commit implantado), telemetria de custo e status do guard | [Saúde e erros](docs/HEALTH_AND_ERROR_REPORTING.md) |
 | **Segurança e governança** | Gate de assinatura, trilha de auditoria e recibos em produção; máscara de PII, orçamento diário e política por agente (inclusive para agentes novos) em integração pelo Agent Guard | [Agent Guard](docs/AGENT_GUARD.md) · [Segurança](docs/SECURITY.md) |
 | **Entrada multimodal** | Voz por telefonia e documentos, com transcrição classificada e resumida por agentes | [voice_call_langgraph_excerpt.py](examples/voice_call_langgraph_excerpt.py) |
 | **Do protótipo ao produto** | Níveis de maturidade, do endpoint experimental ao produto com assinatura | [Maturidade](docs/MATURITY.md) |
-| **Operação** | Deploy em contêiner, supervisão de processos, diagnóstico de incidentes por escrito | [Post-mortem](docs/INCIDENT_LINKEDIN_AGENT.md) |
+| **Operação** | Pulso de saúde a cada 30 minutos, verificação profunda diária com amostra viva de agentes, detecção de pico de erro por agente, relatório persistido e alerta por e-mail, post-mortems escritos | [Saúde e erros](docs/HEALTH_AND_ERROR_REPORTING.md) · [Post-mortem](docs/INCIDENT_LINKEDIN_AGENT.md) |
 
 ## Portfólio
 
@@ -84,7 +84,7 @@ flowchart TB
 2. **Agentes são grafos, não prompts soltos.** O pipeline de voz roda em LangGraph, com nós concorrentes e um nó de compliance que grava o recibo de auditoria.
 3. **Segurança é da arquitetura, não de cada agente.** Um ponto central, em integração, protege toda chamada de LLM para que um agente novo nasça protegido.
 4. **Governança honesta.** Cada controle é marcado como *ligado* ou *implementado, ainda não integrado*.
-5. **Rodar o que se constrói.** Health checks agendados, telemetria de custo e post-mortems escritos.
+5. **Rodar o que se constrói.** Verificação de saúde agendada que detecta e reporta, sem autocorreção às cegas; telemetria de custo e post-mortems escritos.
 
 ## Verifique você mesmo
 

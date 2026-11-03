@@ -12,7 +12,7 @@
 | **Cobrança** | Stripe e AbacatePay (PIX), com webhooks |
 | **Telefonia** | Vapi, com webhook, métricas de custo por minuto e alertas de uso |
 | **Jobs agendados** | GitHub Actions: health check diário e pulso de saúde, jobs de conteúdo; jobs internos no backend |
-| **Observabilidade** | Endpoints de saúde, telemetria de custo por chamada, post-mortems escritos |
+| **Observabilidade** | Verificação de saúde a cada 30 minutos e uma profunda por dia, log de execução por agente, alerta por e-mail, telemetria de custo, post-mortems escritos. Ver [Saúde e erros](HEALTH_AND_ERROR_REPORTING.md) |
 
 ## Preparado para escalar (manifestos e IaC no repositório)
 
